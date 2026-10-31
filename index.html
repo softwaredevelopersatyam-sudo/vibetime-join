@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Vibetime स्कोरिंग में जुड़ें</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       background:#0F172A;color:#fff;font-family:system-ui,sans-serif;padding:24px;box-sizing:border-box}
+  .card{max-width:420px;width:100%;background:#1E293B;border-radius:16px;padding:28px;text-align:center}
+  h1{font-size:20px;margin:0 0 6px;color:#FFD700}
+  p{color:#B0BEC5;font-size:14px;line-height:1.6;margin:10px 0}
+  .code{font-size:34px;font-weight:700;letter-spacing:6px;color:#FFD700;background:#0F172A;
+        border-radius:12px;padding:14px;margin:16px 0}
+  a.btn,button{display:block;width:100%;box-sizing:border-box;padding:15px;margin-top:12px;border:0;
+        border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;cursor:pointer}
+  a.btn{background:#2E7D32;color:#fff}
+  button{background:#334155;color:#fff}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🏏 Vibetime स्कोरिंग</h1>
+  <p>इस मैच को स्कोर करने के लिए जुड़ें</p>
+
+  <div id="codeBox" class="hide">
+    <div class="code" id="code"></div>
+    <button id="copyBtn" type="button">Code कॉपी करें</button>
+  </div>
+
+  <a id="openBtn" class="btn hide" href="#">App में खोलें</a>
+
+  <p>App न खुले तो: Vibetime app खोलें → Create → <b>Join Scoring with Code</b> → ऊपर वाला Code डालें।</p>
+  <p id="bad" class="hide">यह link अधूरा लगता है। भेजने वाले से दोबारा link या Code माँगें।</p>
+</div>
+<script>
+  var q = new URLSearchParams(location.search);
+  var c = (q.get("c") || "").toUpperCase();
+  var m = q.get("m") || "";
+  var okC = /^[A-Z2-9]{6}$/.test(c);
+  var okM = /^[A-Za-z0-9]{20}$/.test(m);
+
+  if (okC) {
+    document.getElementById("code").textContent = c;
+    document.getElementById("codeBox").className = "";
+    document.getElementById("copyBtn").onclick = function () {
+      var b = this;
+      function done() { b.textContent = "कॉपी हो गया ✓"; }
+      if (navigator.clipboard) { navigator.clipboard.writeText(c).then(done, done); } else { done(); }
+    };
+  }
+  if (okM) {
+    var a = document.getElementById("openBtn");
+    a.href = "vibetime://scoring?matchId=" + m;
+    a.className = "btn";
+  }
+  if (!okC && !okM) document.getElementById("bad").className = "";
+</script>
+</body>
+</html>
